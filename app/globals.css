@@ -1,0 +1,185 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 245 243 238;   /* #F5F3EE - matches CAC dashboard */
+  --foreground: 26 26 26;      /* #1A1A1A - CAC text */
+  --card: 255 255 255;
+  --border: 224 217 201;
+  --brand: 212 74 138;         /* #D44A8A - CAC pill active */
+}
+
+html, body {
+  background: #F5F3EE;
+  color: rgb(var(--foreground));
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-xl border border-stone-200 p-4;
+  }
+  .card-title {
+    @apply text-sm font-medium text-ink-700 mb-3;
+  }
+  .kpi-label {
+    @apply text-[11px] uppercase tracking-wider text-ink-500 font-medium leading-tight;
+    min-height: 2.5rem; /* reserve 2 lines so all KPI values align horizontally */
+    display: flex;
+    align-items: flex-start;
+  }
+  .kpi-value {
+    @apply text-[26px] font-bold text-ink-900 tabular-nums leading-tight;
+  }
+  .kpi-delta-up   { @apply text-emerald-600 text-xs font-medium; }
+  .kpi-delta-down { @apply text-rose-600 text-xs font-medium; }
+  .pill {
+    @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors;
+  }
+  .btn-ghost  { @apply text-ink-700 hover:bg-brand-50; }
+  .btn-brand  { @apply bg-brand-500 text-white hover:bg-brand-600; }
+  .btn-outline { @apply bg-stone-100 text-ink-700 hover:bg-stone-200; }
+  .seg-btn {
+    @apply px-3.5 py-1.5 text-sm rounded-full text-ink-700 hover:bg-stone-200 transition-colors;
+  }
+  .seg-btn-active {
+    @apply bg-ink-900 text-white;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+/* Print-only bar labels - hidden on screen, shown when printing */
+@media screen {
+  .print-bar-label,
+  .recharts-label-list.print-bar-label { display: none !important; visibility: hidden !important; }
+}
+
+/* ===== Print / PDF export — A4 PORTRAIT (210mm x 297mm) ===== */
+@page {
+  size: A4;            /* portrait by default */
+  margin: 10mm 8mm;    /* ~198mm width usable */
+}
+
+@media print {
+  /* Force exact colors and remove animations */
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    box-shadow: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+
+  html, body { background: #fff !important; font-size: 9.5px !important; line-height: 1.22 !important; }
+
+  /* ===== HEADER COMPACTO ===== */
+  header {
+    position: relative !important;
+    border-bottom: 1px solid #E0D9C9 !important;
+    padding: 0 !important;
+    margin: 0 0 3mm 0 !important;
+    page-break-after: avoid !important;
+  }
+  header > div { padding: 0 !important; max-width: 100% !important; }
+  header h1 { font-size: 16px !important; margin: 0 0 1mm 0 !important; letter-spacing: -0.3px !important; line-height: 1.1 !important; }
+  header p { font-size: 9px !important; margin: 0 0 0.5mm 0 !important; line-height: 1.3 !important; }
+  header div.text-\[12px\] { font-size: 8px !important; color: #666 !important; margin-top: 0 !important; }
+  /* Hide filter card and region pills on print */
+  header > div > div:last-child { display: none !important; }
+  header > div > div.flex.flex-wrap.items-center.gap-2.mt-1 { display: none !important; }
+
+  /* ===== MAIN ===== */
+  main { padding: 0 !important; margin: 0 !important; max-width: 100% !important; }
+  main > * { margin-top: 2.5mm !important; }
+  main > *:first-child { margin-top: 0 !important; }
+
+  /* ===== CARDS DENSOS ===== */
+  .card {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    border: 1px solid #E0D9C9 !important;
+    padding: 4px 6px !important;
+    border-radius: 3px !important;
+  }
+  .card-title { font-size: 8.5px !important; margin-bottom: 2px !important; font-weight: 600 !important; line-height: 1.2 !important; }
+
+  /* ===== KPIs (cabem 6 numa linha em portrait, pequenos) ===== */
+  .kpi-label { font-size: 7px !important; min-height: 1.3em !important; margin: 0 !important; line-height: 1.15 !important; letter-spacing: 0.5px !important; }
+  .kpi-value { font-size: 12px !important; line-height: 1.05 !important; margin: 1px 0 !important; font-weight: 700 !important; }
+  .kpi-delta-up, .kpi-delta-down { font-size: 6.5px !important; }
+  .kpi-label + div { font-size: 6.5px !important; }
+
+  /* ===== CHARTS COMPACTOS ===== */
+  /* All chart heights tuned for A4 portrait */
+  .card > div[style*="height"] {
+    height: 110px !important;
+    max-height: 110px !important;
+    min-height: 110px !important;
+  }
+  /* Donut (pie) slightly smaller */
+  .card:has(.recharts-pie) > div[style*="height"] { height: 100px !important; max-height: 100px !important; }
+
+  /* ===== TABELAS COMPACTAS ===== */
+  table { font-size: 7.5px !important; width: 100% !important; }
+  th { padding: 2px 3px !important; font-weight: 600 !important; background: #FAF6EE !important; line-height: 1.2 !important; }
+  td { padding: 1.5px 3px !important; line-height: 1.25 !important; }
+  table tr { page-break-inside: avoid !important; }
+  /* Limit table rows */
+  table tbody tr:nth-of-type(n+11) { display: none !important; }
+
+  /* ===== GRIDS: força colunas mesmo em print ===== */
+  .grid { display: grid !important; gap: 2.5mm !important; }
+  .lg\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)) !important; }
+  .lg\:grid-cols-6  { grid-template-columns: repeat(6, minmax(0, 1fr)) !important; }
+  .lg\:grid-cols-3  { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+  .lg\:grid-cols-2  { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .lg\:col-span-9 { grid-column: span 9 / span 9 !important; }
+  .lg\:col-span-3 { grid-column: span 3 / span 3 !important; }
+  .lg\:col-span-2 { grid-column: span 2 / span 2 !important; }
+  .lg\:col-span-1 { grid-column: span 1 / span 1 !important; }
+
+  /* Reduce gaps */
+  section { page-break-inside: avoid !important; break-inside: avoid !important; margin: 0 !important; }
+  .space-y-4 > * + *, .space-y-3 > * + *, .space-y-5 > * + * { margin-top: 2.5mm !important; }
+
+  /* ===== HIDE non-essential ===== */
+  button, .recharts-legend-wrapper, .recharts-tooltip-wrapper { display: none !important; }
+  .card > .flex.items-center.gap-3.mt-2,
+  .card > .flex.items-center.gap-3.mt-3 { display: none !important; }
+
+  /* ===== PRINT BAR LABELS ===== */
+  .print-bar-label,
+  .recharts-label-list.print-bar-label,
+  .recharts-label-list.print-bar-label text {
+    display: block !important;
+    visibility: visible !important;
+    fill: #1A1A1A !important;
+    font-size: 6.5px !important;
+    font-weight: 600 !important;
+  }
+
+  /* ===== FOOTER ===== */
+  footer { font-size: 7px !important; padding: 1.5mm 0 !important; border-top: 1px solid #E0D9C9 !important; margin-top: 2mm !important; }
+
+  /* ===== PAGE BREAK HINTS =====
+     Stable layout per page in portrait:
+     P1: header + KPIs row + Gender donut + Funnel
+     P2: Top Campaigns table
+     P3: 4 charts (Spend×Rev, Impressions, Clicks, CTR)
+     P4: 4 charts (CPC, ROAS Daily, Top Ads, ROAS Monthly)
+     P5: Reach&Freq, Scatter, Age groups, Regions
+     P6: Performance by Age table + Creative performance
+  */
+  /* Reduce min/max width override so 6 KPIs really fit in a line */
+  .lg\:grid-cols-6 .card { min-width: 0 !important; padding: 4px 5px !important; }
+}
