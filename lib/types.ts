@@ -83,6 +83,7 @@ export interface EngagementPost {
   permalink?: string;
   spend: number;
   engagement: number;
+  likes: number;
   reactions: number;
   comments: number;
   saves: number;

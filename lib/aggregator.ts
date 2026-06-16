@@ -499,6 +499,7 @@ export async function buildDashboard(
         permalink: (engCreatives[i] as any)?.permalink,
         spend: spendN,
         engagement: eng,
+        likes: findAction(r.actions, 'onsite_conversion.post_net_like') || findAction(r.actions, 'like'),
         reactions: findAction(r.actions, 'post_reaction'),
         comments: findAction(r.actions, 'comment'),
         saves: findAction(r.actions, 'onsite_conversion.post_save'),
