@@ -8,6 +8,7 @@ import {
   findActionValue,
   resolveAccountsForRegion,
   fetchAdCreativeImage,
+  fetchAdCreative,
   ACTION_TYPES,
   currencyForRegion,
   type MetaAccount,
@@ -466,6 +467,49 @@ export async function buildDashboard(
     ctr: a.ctr,
   }));
 
+  // --- 14. Engajamento (mídia paga) — campanha "Engajamento_Instagram" ---
+  // Inclui TODOS os posts impulsionados nessa campanha no período selecionado.
+  const ENGAGEMENT_CAMPAIGN = 'Engajamento_Instagram';
+  const engagementRaw = (
+    await Promise.all(
+      accounts.map((a) =>
+        fetchInsights(a.id, {
+          level: 'ad',
+          timeRange: range,
+          fields: ['ad_id', 'ad_name', 'campaign_name', 'spend', 'impressions', 'reach', 'inline_link_clicks', 'actions'],
+          filtering: [{ field: 'campaign.name', operator: 'CONTAIN', value: ENGAGEMENT_CAMPAIGN }],
+          limit: 300,
+        })
+          .then(tagAccount(a))
+          .catch(() => [])
+      )
+    )
+  ).flat();
+
+  const engCreatives = await Promise.all(engagementRaw.map((r) => fetchAdCreative(r.ad_id).catch(() => ({}))));
+  const engagementPosts = engagementRaw
+    .map((r, i) => {
+      const eng = findAction(r.actions, 'post_engagement');
+      const spendN = NUM(r.spend);
+      return {
+        id: r.ad_id,
+        name: r.ad_name,
+        account: r._account,
+        image: (engCreatives[i] as any)?.image,
+        permalink: (engCreatives[i] as any)?.permalink,
+        spend: spendN,
+        engagement: eng,
+        reactions: findAction(r.actions, 'post_reaction'),
+        comments: findAction(r.actions, 'comment'),
+        saves: findAction(r.actions, 'onsite_conversion.post_save'),
+        videoViews: findAction(r.actions, 'video_view'),
+        linkClicks: NUM(r.inline_link_clicks) || findAction(r.actions, 'link_click'),
+        shares: findAction(r.actions, 'post'),
+        costPerEngagement: eng > 0 ? spendN / eng : 0,
+      };
+    })
+    .sort((a, b) => b.spend - a.spend);
+
   return {
     region,
     period,
@@ -510,6 +554,7 @@ export async function buildDashboard(
     campaigns,
     ads,
     topCreatives,
+    engagementPosts,
   };
 }
 
@@ -534,6 +579,6 @@ function emptyDashboard(region: Region, period: Period, range: any, compare: any
     },
     scatter: [], topCampaignsByObjective: [], topCampaigns7d: [], highCpcCampaigns7d: [],
     topAds7d: [], ageGroupSpend: [], agePerformance: [], regionsBySpend: [],
-    campaigns: [], ads: [], topCreatives: [],
+    campaigns: [], ads: [], topCreatives: [], engagementPosts: [],
   };
 }

@@ -75,6 +75,23 @@ export interface CreativeCard {
   ctr?: number;
 }
 
+export interface EngagementPost {
+  id: string;
+  name: string;
+  account: string;
+  image?: string;
+  permalink?: string;
+  spend: number;
+  engagement: number;
+  reactions: number;
+  comments: number;
+  saves: number;
+  videoViews: number;
+  linkClicks: number;
+  shares: number;
+  costPerEngagement: number;
+}
+
 export interface AgePerformanceRow {
   age: string;
   spend: number;
@@ -147,4 +164,5 @@ export interface DashboardData {
   campaigns: CampaignRow[];
   ads: AdRow[];
   topCreatives: CreativeCard[];
+  engagementPosts: EngagementPost[];
 }

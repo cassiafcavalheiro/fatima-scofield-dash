@@ -18,6 +18,7 @@ import CampaignsTable from '@/components/CampaignsTable';
 import AdsTable from '@/components/AdsTable';
 import TopCreatives from '@/components/TopCreatives';
 import Diagnostico from '@/components/Diagnostico';
+import EngagementTab from '@/components/EngagementTab';
 import { formatCurrency, formatNumber, formatPercent } from '@/lib/format';
 import type { DashboardData, DateRange, Period, Region } from '@/lib/types';
 
@@ -30,7 +31,7 @@ export default function HomePage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [view, setView] = useState<'geral' | 'diagnostico'>('geral');
+  const [view, setView] = useState<'geral' | 'diagnostico' | 'engajamento'>('geral');
 
   const load = useCallback(async () => {
     setLoading(true); setError(null);
@@ -121,6 +122,13 @@ export default function HomePage() {
                 className={view === 'diagnostico' ? 'bg-ink-900 text-white' : 'bg-ink-50 text-ink-600 hover:bg-ink-100'}
               >
                 Diagnóstico
+              </button>
+              <button
+                onClick={() => setView('engajamento')}
+                style={{ padding: '6px 14px', borderRadius: 999, fontSize: 12, fontWeight: 600 }}
+                className={view === 'engajamento' ? 'bg-ink-900 text-white' : 'bg-ink-50 text-ink-600 hover:bg-ink-100'}
+              >
+                Engajamento
               </button>
             </div>
 
@@ -245,6 +253,8 @@ export default function HomePage() {
             )}
 
             {view === 'diagnostico' && <Diagnostico data={data} />}
+
+            {view === 'engajamento' && <EngagementTab data={data.engagementPosts} currency={currency} />}
 
             <footer className="text-xs text-ink-500 text-center py-6 border-t border-ink-200 mt-8">
               <div>Fátima Scofield Analytics · Meta Ads (Geral + B2C + B2B)</div>
