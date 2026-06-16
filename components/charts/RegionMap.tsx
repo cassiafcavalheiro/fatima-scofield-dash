@@ -9,7 +9,7 @@ interface Props {
 
 /** Simple horizontal bar list (no map dependency).
  *  For a real map, swap for `react-simple-maps` + topojson later. */
-export default function RegionList({ data, currency = 'USD', title = 'Region by Amount spent' }: Props) {
+export default function RegionList({ data, currency = 'USD', title = 'Regiões por gasto' }: Props) {
   const max = Math.max(...data.map((d) => d.spend), 1);
   return (
     <div className="card h-full">

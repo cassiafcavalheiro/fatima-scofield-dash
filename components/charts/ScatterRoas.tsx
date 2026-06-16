@@ -9,7 +9,7 @@ export default function ScatterRoas({ data, currency = 'USD' }: { data: ScatterP
 
   return (
     <div className="card">
-      <div className="card-title">Amount Spent × ROAS · Last 28 Days (1 point = 1 ad)</div>
+      <div className="card-title">Valor gasto × ROAS · Últimos 28 dias (1 ponto = 1 anúncio)</div>
       <div className="h-[340px]">
         <ResponsiveContainer width="100%" height="100%">
           <ScatterChart margin={{ top: 10, right: 16, left: 0, bottom: 16 }}>
@@ -17,14 +17,14 @@ export default function ScatterRoas({ data, currency = 'USD' }: { data: ScatterP
             <XAxis
               type="number"
               dataKey="spend"
-              name="Amount spent"
+              name="Valor gasto"
               scale="log"
               domain={['auto', 'auto']}
               tickFormatter={(v) => formatCurrency(v, currency, true)}
               tick={{ fontSize: 10, fill: '#64748B' }}
               tickLine={false}
               axisLine={{ stroke: '#E7E5DE' }}
-              label={{ value: 'Amount spent', position: 'insideBottom', offset: -8, fontSize: 11, fill: '#64748B' }}
+              label={{ value: 'Valor gasto', position: 'insideBottom', offset: -8, fontSize: 11, fill: '#64748B' }}
             />
             <YAxis
               type="number"
@@ -47,7 +47,7 @@ export default function ScatterRoas({ data, currency = 'USD' }: { data: ScatterP
                 return (
                   <div className="bg-white border border-stone-200 rounded-lg p-2 shadow-sm">
                     <div className="text-xs font-semibold text-ink-800 max-w-[260px]">{p.name}</div>
-                    <div className="text-[11px] text-ink-600 mt-1">Spend: <span className="font-medium">{formatCurrency(p.spend, currency, true)}</span></div>
+                    <div className="text-[11px] text-ink-600 mt-1">Gasto: <span className="font-medium">{formatCurrency(p.spend, currency, true)}</span></div>
                     <div className="text-[11px] text-ink-600">ROAS: <span className="font-medium">{p.roas.toFixed(2)}</span></div>
                   </div>
                 );

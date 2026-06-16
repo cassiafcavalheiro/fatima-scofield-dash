@@ -2,7 +2,7 @@
 import type { AdRow } from '@/lib/types';
 import { formatCurrency, formatDecimal, formatNumber, formatPercent } from '@/lib/format';
 
-export default function AdsTable({ data, currency = 'USD', title = 'Creative performance' }: { data: AdRow[]; currency?: string; title?: string }) {
+export default function AdsTable({ data, currency = 'USD', title = 'Desempenho de criativos' }: { data: AdRow[]; currency?: string; title?: string }) {
   return (
     <div className="card">
       <div className="card-title">{title}</div>
@@ -10,14 +10,14 @@ export default function AdsTable({ data, currency = 'USD', title = 'Creative per
         <table className="w-full text-xs">
           <thead className="text-ink-600 bg-brand-50">
             <tr>
-              <th className="text-left px-2 py-1.5">Ad name</th>
-              <th className="text-left px-2 py-1.5">Account</th>
-              <th className="text-right px-2 py-1.5">Spent</th>
+              <th className="text-left px-2 py-1.5">Anúncio</th>
+              <th className="text-left px-2 py-1.5">Conta</th>
+              <th className="text-right px-2 py-1.5">Gasto</th>
               <th className="text-right px-2 py-1.5">CTR</th>
-              <th className="text-right px-2 py-1.5">ATC</th>
-              <th className="text-right px-2 py-1.5">Purchases</th>
-              <th className="text-right px-2 py-1.5">Purch. Value</th>
-              <th className="text-right px-2 py-1.5">Cost per Purch.</th>
+              <th className="text-right px-2 py-1.5">Carrinho</th>
+              <th className="text-right px-2 py-1.5">Compras</th>
+              <th className="text-right px-2 py-1.5">Valor compras</th>
+              <th className="text-right px-2 py-1.5">Custo/compra</th>
               <th className="text-right px-2 py-1.5">ROAS</th>
             </tr>
           </thead>

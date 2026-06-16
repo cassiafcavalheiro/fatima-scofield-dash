@@ -14,14 +14,14 @@ const PERIODS: { id: Period; label: string }[] = [
 ];
 
 const PERIOD_LABELS: Record<Period, string> = {
-  '1d':  'Last day',
-  '7d':  'Last 7 days',
-  '14d': 'Last 14 days',
-  '28d': 'Last 28 days',
-  '3M':  'Last 3 months',
-  '6M':  'Last 6 months',
-  '12M': 'Last 12 months',
-  'custom': 'Custom range',
+  '1d':  'Último dia',
+  '7d':  'Últimos 7 dias',
+  '14d': 'Últimos 14 dias',
+  '28d': 'Últimos 28 dias',
+  '3M':  'Últimos 3 meses',
+  '6M':  'Últimos 6 meses',
+  '12M': 'Últimos 12 meses',
+  'custom': 'Período personalizado',
 };
 
 interface Props {
@@ -39,7 +39,7 @@ interface Props {
 function formatLongDate(iso: string): string {
   if (!iso) return '';
   const d = new Date(iso + 'T00:00:00');
-  return d.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+  return d.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
 export default function Header({
@@ -53,7 +53,7 @@ export default function Header({
   useEffect(() => {
     if (!lastUpdated) return setTime('—');
     const d = new Date(lastUpdated);
-    setTime(d.toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'medium' }));
+    setTime(d.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'medium' }));
   }, [lastUpdated]);
 
   useEffect(() => {
@@ -69,29 +69,29 @@ export default function Header({
 
   return (
     <header className="bg-transparent" data-region={region}>
-      <div className="max-w-[1480px] mx-auto px-8 pt-8 pb-6">
+      <div className="max-w-[1480px] mx-auto px-4 sm:px-8 pt-6 sm:pt-8 pb-6">
         {/* Logo + Title */}
         <div className="flex items-center gap-3">
           <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-brand-500 text-white text-[18px] font-bold">F</div>
-          <h1 className="text-[32px] text-ink-900" style={{ fontWeight: 600, letterSpacing: '-0.64px', margin: 0 }}>
+          <h1 className="text-[22px] sm:text-[32px] text-ink-900" style={{ fontWeight: 600, letterSpacing: '-0.64px', margin: 0 }}>
             Fátima Scofield – Meta Ads
           </h1>
         </div>
 
         {/* Subtitle */}
         <p className="text-[15px] text-ink-700 mt-4 leading-normal">
-          Meta Ads performance · Fátima Scofield (Geral + B2C + B2B) · data through{' '}
+          Desempenho Meta Ads · Fátima Scofield (Geral + B2C + B2B) · dados até{' '}
           {dateRange && (
             <strong className="text-ink-900 font-semibold">{formatLongDate(dateRange.until)}</strong>
           )}
           {' '}· via Meta Marketing API
         </p>
-        <div className="text-[12px] text-ink-500 mt-1">Last updated {time}</div>
+        <div className="text-[12px] text-ink-500 mt-1">Atualizado em {time}</div>
 
         {/* Filter card */}
         <div className="mt-5 bg-white rounded-2xl border border-stone-200 px-5 py-3">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[11px] font-semibold tracking-widest text-ink-400 uppercase mr-1">Period</span>
+            <span className="text-[11px] font-semibold tracking-widest text-ink-400 uppercase mr-1">Período</span>
 
             {/* Period pills - exact CAC: 12px / weight 600 / 6px 14px / bg ink-900 active */}
             {PERIODS.map((p) => (
@@ -116,7 +116,7 @@ export default function Header({
               onChange={(e) => setSince(e.target.value)}
               className="ml-3 px-2.5 py-1.5 text-sm bg-white border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-400"
             />
-            <span className="text-xs text-ink-500">to</span>
+            <span className="text-xs text-ink-500">até</span>
             <input
               type="date"
               value={until}
@@ -128,7 +128,7 @@ export default function Header({
               style={{ padding: '6px 14px', borderRadius: 999, fontSize: 12, fontWeight: 600 }}
               className="bg-ink-900 text-white hover:bg-ink-800 transition-colors"
             >
-              Apply
+              Aplicar
             </button>
 
             <div className="flex-1" />
@@ -152,7 +152,7 @@ export default function Header({
               className="inline-flex items-center gap-1.5 bg-brand-500 text-white hover:bg-brand-600 transition-colors"
             >
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10" /><polyline points="1 20 1 14 7 14" /><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" /></svg>
-              <span>Refresh now</span>
+              <span>Atualizar agora</span>
             </button>
           </div>
         </div>

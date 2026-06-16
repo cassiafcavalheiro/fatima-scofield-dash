@@ -15,7 +15,7 @@ export function formatCurrency(
 
 export function formatNumber(value: number, compact: boolean = false): string {
   if (value == null || isNaN(value)) return '—';
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat('pt-BR', {
     notation: compact ? 'compact' : 'standard',
     maximumFractionDigits: compact ? 1 : 0,
   }).format(value);
@@ -53,7 +53,7 @@ export function formatDate(d: string | Date, format: 'short' | 'long' | 'iso' = 
   const date = typeof d === 'string' ? new Date(d) : d;
   if (format === 'iso') return date.toISOString().slice(0, 10);
   if (format === 'long') {
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    return date.toLocaleDateString('pt-BR', { year: 'numeric', month: 'short', day: 'numeric' });
   }
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  return date.toLocaleDateString('pt-BR', { month: 'short', day: 'numeric' });
 }

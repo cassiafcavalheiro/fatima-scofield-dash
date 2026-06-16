@@ -7,6 +7,7 @@ import {
   findAction,
   findActionValue,
   resolveAccountsForRegion,
+  fetchAdCreativeImage,
   ACTION_TYPES,
   currencyForRegion,
   type MetaAccount,
@@ -450,6 +451,21 @@ export async function buildDashboard(
   // --- 12. Spend vs ROAS scatter (ad level top 50) ---
   const scatter = ads.slice(0, 50).map((a) => ({ name: a.name, spend: a.spend, roas: a.roas }));
 
+  // --- 13. Top 5 criativos com imagem (boa resolução) ---
+  const top5 = ads.slice(0, 5);
+  const top5Images = await Promise.all(top5.map((a) => fetchAdCreativeImage(a.id)));
+  const topCreatives = top5.map((a, i) => ({
+    id: a.id,
+    name: a.name,
+    account: a.account,
+    image: top5Images[i],
+    spend: a.spend,
+    revenue: a.revenue,
+    purchases: a.purchases,
+    roas: a.roas,
+    ctr: a.ctr,
+  }));
+
   return {
     region,
     period,
@@ -457,12 +473,12 @@ export async function buildDashboard(
     comparisonRange: compare,
     lastUpdated: new Date().toISOString(),
     kpis: {
-      spend:    { label: 'Amount spent',           value: spend,    delta: pct(spend, prevSpend),         format: 'currency' },
-      revenue:  { label: 'Purchase conversion value', value: revenue, delta: pct(revenue, prevRevenue),  format: 'currency' },
+      spend:    { label: 'Valor gasto',           value: spend,    delta: pct(spend, prevSpend),         format: 'currency' },
+      revenue:  { label: 'Valor de conversão', value: revenue, delta: pct(revenue, prevRevenue),  format: 'currency' },
       roas:     { label: 'ROAS',                    value: roas,     delta: pct(roas, prevRoas),         format: 'decimal' },
-      convRate: { label: 'Conversion Rate',         value: convRate, delta: pct(convRate, prevConvRate), format: 'percent' },
-      clicks:   { label: 'Clicks (all)',            value: clicks,   delta: pct(clicks, prevClicks),     format: 'number' },
-      cpc:      { label: 'CPC (all)',               value: cpc,      delta: pct(cpc, prevCpc),           format: 'decimal' },
+      convRate: { label: 'Taxa de conversão',         value: convRate, delta: pct(convRate, prevConvRate), format: 'percent' },
+      clicks:   { label: 'Cliques (todos)',            value: clicks,   delta: pct(clicks, prevClicks),     format: 'number' },
+      cpc:      { label: 'CPC (todos)',               value: cpc,      delta: pct(cpc, prevCpc),           format: 'decimal' },
     },
     funnel: {
       landingPageViews: lpv,
@@ -493,6 +509,7 @@ export async function buildDashboard(
     regionsBySpend,
     campaigns,
     ads,
+    topCreatives,
   };
 }
 
@@ -502,12 +519,12 @@ function emptyDashboard(region: Region, period: Period, range: any, compare: any
     region, period, dateRange: range, comparisonRange: compare,
     lastUpdated: new Date().toISOString(),
     kpis: {
-      spend: k('Amount spent', 'currency'),
-      revenue: k('Purchase conversion value', 'currency'),
+      spend: k('Valor gasto', 'currency'),
+      revenue: k('Valor de conversão', 'currency'),
       roas: k('ROAS', 'decimal'),
-      convRate: k('Conversion Rate', 'percent'),
-      clicks: k('Clicks (all)', 'number'),
-      cpc: k('CPC (all)', 'decimal'),
+      convRate: k('Taxa de conversão', 'percent'),
+      clicks: k('Cliques (todos)', 'number'),
+      cpc: k('CPC (todos)', 'decimal'),
     },
     funnel: { landingPageViews: 0, addsToCart: 0, checkoutsInitiated: 0, purchases: 0 },
     purchasesByGender: [],
@@ -517,6 +534,6 @@ function emptyDashboard(region: Region, period: Period, range: any, compare: any
     },
     scatter: [], topCampaignsByObjective: [], topCampaigns7d: [], highCpcCampaigns7d: [],
     topAds7d: [], ageGroupSpend: [], agePerformance: [], regionsBySpend: [],
-    campaigns: [], ads: [],
+    campaigns: [], ads: [], topCreatives: [],
   };
 }

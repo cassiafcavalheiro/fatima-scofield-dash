@@ -10,7 +10,7 @@ interface Props {
 export default function ObjectiveSpend({ data, currency = 'USD' }: Props) {
   return (
     <div className="card h-full">
-      <div className="card-title">Campaign Objective Spent</div>
+      <div className="card-title">Gasto por objetivo</div>
       <div className="h-[220px]">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} layout="vertical" margin={{ top: 10, right: 16, left: 0, bottom: 0 }}>

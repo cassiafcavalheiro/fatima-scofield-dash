@@ -19,21 +19,21 @@ export default function PerformanceByAge({ data, currency = 'USD' }: Props) {
 
   return (
     <div className="card">
-      <div className="card-title">Performance by age group</div>
+      <div className="card-title">Desempenho por faixa etária</div>
       <div className="overflow-x-auto">
         <table className="w-full text-xs">
           <thead className="text-ink-600 bg-brand-50">
             <tr>
               <th className="text-left px-2 py-1.5">#</th>
-              <th className="text-left px-2 py-1.5">Age</th>
-              <th className="text-right px-2 py-1.5">Spend</th>
-              <th className="text-right px-2 py-1.5">Impressions</th>
-              <th className="text-right px-2 py-1.5">Clicks</th>
+              <th className="text-left px-2 py-1.5">Idade</th>
+              <th className="text-right px-2 py-1.5">Gasto</th>
+              <th className="text-right px-2 py-1.5">Impressões</th>
+              <th className="text-right px-2 py-1.5">Cliques</th>
               <th className="text-right px-2 py-1.5">CPM</th>
               <th className="text-right px-2 py-1.5">CPC</th>
               <th className="text-right px-2 py-1.5">CTR</th>
-              <th className="text-right px-2 py-1.5">Conversions</th>
-              <th className="text-right px-2 py-1.5">Conv. Value</th>
+              <th className="text-right px-2 py-1.5">Conversões</th>
+              <th className="text-right px-2 py-1.5">Valor conv.</th>
             </tr>
           </thead>
           <tbody>
@@ -53,7 +53,7 @@ export default function PerformanceByAge({ data, currency = 'USD' }: Props) {
             ))}
             <tr className="border-t-2 border-brand-300 bg-brand-50 font-semibold text-ink-800">
               <td className="px-2 py-1.5"></td>
-              <td className="px-2 py-1.5">Grand total</td>
+              <td className="px-2 py-1.5">Total geral</td>
               <td className="px-2 py-1.5 text-right tabular-nums">{formatCurrency(total.spend, currency, true)}</td>
               <td className="px-2 py-1.5 text-right tabular-nums">{formatNumber(total.impressions, true)}</td>
               <td className="px-2 py-1.5 text-right tabular-nums">{formatNumber(total.clicks, true)}</td>

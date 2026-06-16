@@ -16,6 +16,8 @@ import RegionList from '@/components/charts/RegionMap';
 import PerformanceByAge from '@/components/PerformanceByAge';
 import CampaignsTable from '@/components/CampaignsTable';
 import AdsTable from '@/components/AdsTable';
+import TopCreatives from '@/components/TopCreatives';
+import Diagnostico from '@/components/Diagnostico';
 import { formatCurrency, formatNumber, formatPercent } from '@/lib/format';
 import type { DashboardData, DateRange, Period, Region } from '@/lib/types';
 
@@ -28,6 +30,7 @@ export default function HomePage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [view, setView] = useState<'geral' | 'diagnostico'>('geral');
 
   const load = useCallback(async () => {
     setLoading(true); setError(null);
@@ -77,10 +80,10 @@ export default function HomePage() {
         onExportPdf={handleExportPdf}
       />
 
-      <main className="max-w-[1480px] mx-auto px-6 py-5 space-y-5">
+      <main className="max-w-[1480px] mx-auto px-4 sm:px-6 py-5 space-y-5">
         {error && (
           <div className="card border-rose-300 bg-rose-50 text-rose-700 text-sm">
-            <strong>Error:</strong> {error}
+            <strong>Erro:</strong> {error}
             <div className="text-xs mt-1 text-rose-600">
               Check that META_ACCESS_TOKEN is valid and that the 3 accounts (Fátima Scofield, Fátima Scofield - B2C, Fátima Scofield - B2B) are accessible by the token.
             </div>
@@ -88,7 +91,7 @@ export default function HomePage() {
         )}
 
         {!data && loading && (
-          <div className="card text-center py-12 text-ink-500">Loading Meta Ads data…</div>
+          <div className="card text-center py-12 text-ink-500">Carregando dados do Meta Ads…</div>
         )}
 
         {data && (
@@ -103,21 +106,41 @@ export default function HomePage() {
               </span>
             </div>
 
+            {/* Abas */}
+            <div className="flex items-center gap-2 mt-3">
+              <button
+                onClick={() => setView('geral')}
+                style={{ padding: '6px 14px', borderRadius: 999, fontSize: 12, fontWeight: 600 }}
+                className={view === 'geral' ? 'bg-ink-900 text-white' : 'bg-ink-50 text-ink-600 hover:bg-ink-100'}
+              >
+                Visão geral
+              </button>
+              <button
+                onClick={() => setView('diagnostico')}
+                style={{ padding: '6px 14px', borderRadius: 999, fontSize: 12, fontWeight: 600 }}
+                className={view === 'diagnostico' ? 'bg-ink-900 text-white' : 'bg-ink-50 text-ink-600 hover:bg-ink-100'}
+              >
+                Diagnóstico
+              </button>
+            </div>
+
+            {view === 'geral' && (
+            <>
             {/* Row 1: KPIs (left, 9 col) | Gender donut (right, 3 col) — auto height */}
             <section className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
               <div className="lg:col-span-9 space-y-3">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-[11px] font-semibold tracking-widest text-ink-400 uppercase">
-                  <div>Cost &amp; Revenue</div>
-                  <div>Revenue Efficiency</div>
-                  <div>Click Metrics</div>
+                  <div>Custo e Receita</div>
+                  <div>Eficiência de Receita</div>
+                  <div>Métricas de Clique</div>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
                   <KpiCard kpi={data.kpis.spend} currency={currency} />
                   <KpiCard kpi={data.kpis.revenue} currency={currency} />
-                  <KpiCard kpi={data.kpis.roas} hint="Revenue / Spend" />
-                  <KpiCard kpi={data.kpis.convRate} hint="Purchases / Clicks" />
+                  <KpiCard kpi={data.kpis.roas} hint="Receita / Gasto" />
+                  <KpiCard kpi={data.kpis.convRate} hint="Compras / Cliques" />
                   <KpiCard kpi={data.kpis.clicks} />
-                  <KpiCard kpi={data.kpis.cpc} currency={currency} hint="Spend / Clicks" />
+                  <KpiCard kpi={data.kpis.cpc} currency={currency} hint="Gasto / Cliques" />
                 </div>
               </div>
 
@@ -139,12 +162,12 @@ export default function HomePage() {
             {/* Top 7d rankings */}
             <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <BarRanking
-                title="Top Campaigns"
+                title="Principais campanhas"
                 data={data.topCampaigns7d.map((c) => ({ name: c.name, value: c.spend }))}
                 formatValue={(v) => formatCurrency(v, currency, true)}
               />
               <BarRanking
-                title="Campaigns with high CPC"
+                title="Campanhas com CPC alto"
                 data={data.highCpcCampaigns7d.map((c) => ({ name: c.name, value: c.cpc }))}
                 formatValue={(v) => formatCurrency(v, currency, true)}
                 color="#7E22CE"
@@ -164,7 +187,7 @@ export default function HomePage() {
             <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               <div className="lg:col-span-1"><ObjectiveSpend data={data.topCampaignsByObjective} currency={currency} /></div>
               <div className="lg:col-span-2"><TimeSeriesArea
-                title="Amount spent"
+                title="Valor gasto"
                 data={data.series.spendByDay}
                 yFormat={(v) => formatCurrency(v, currency, true)}
               /></div>
@@ -172,7 +195,7 @@ export default function HomePage() {
 
             <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <TimeSeriesArea
-                title="Impressions"
+                title="Impressões"
                 data={data.series.impressions}
                 yFormat={(v) => formatNumber(v, true)}
               />
@@ -181,12 +204,12 @@ export default function HomePage() {
 
             <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <TimeSeriesArea
-                title="Clicks (all)"
+                title="Cliques (todos)"
                 data={data.series.clicks}
                 yFormat={(v) => formatNumber(v, true)}
               />
               <TimeSeriesArea
-                title="CTR (all)"
+                title="CTR (todos)"
                 data={data.series.ctr}
                 yFormat={(v) => formatPercent(v, 2)}
               />
@@ -194,12 +217,12 @@ export default function HomePage() {
 
             <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <TimeSeriesArea
-                title="CPC (all)"
+                title="CPC (todos)"
                 data={data.series.cpc}
                 yFormat={(v) => formatCurrency(v, currency, true)}
               />
               <TimeSeriesArea
-                title="ROAS · Daily"
+                title="ROAS · Diário"
                 data={data.series.roas}
                 yFormat={(v) => v.toFixed(2)}
                 type="line"
@@ -208,7 +231,7 @@ export default function HomePage() {
 
             <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <BarRanking
-                title="Top Ads (by purchases)"
+                title="Principais anúncios (por compras)"
                 data={data.topAds7d.map((a) => ({ name: a.name, value: a.purchases }))}
                 formatValue={(v) => formatNumber(v)}
               />
@@ -217,9 +240,15 @@ export default function HomePage() {
 
             <AdsTable data={data.ads} currency={currency} />
 
+            <TopCreatives data={data.topCreatives} currency={currency} />
+            </>
+            )}
+
+            {view === 'diagnostico' && <Diagnostico data={data} />}
+
             <footer className="text-xs text-ink-500 text-center py-6 border-t border-ink-200 mt-8">
               <div>Fátima Scofield Analytics · Meta Ads (Geral + B2C + B2B)</div>
-              <div className="mt-1">Period: {data.dateRange.since} → {data.dateRange.until} · vs. {data.comparisonRange.since} → {data.comparisonRange.until}</div>
+              <div className="mt-1">Período: {data.dateRange.since} → {data.dateRange.until} · vs. {data.comparisonRange.since} → {data.comparisonRange.until}</div>
             </footer>
           </>
         )}

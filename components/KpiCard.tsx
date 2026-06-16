@@ -10,7 +10,7 @@ interface Props {
   comparisonLabel?: string;
 }
 
-export default function KpiCard({ kpi, currency, hint, comparisonLabel = 'vs prev.' }: Props) {
+export default function KpiCard({ kpi, currency, hint, comparisonLabel = 'vs. anterior' }: Props) {
   const delta = formatDelta(kpi.delta);
   return (
     <div className="card flex flex-col">

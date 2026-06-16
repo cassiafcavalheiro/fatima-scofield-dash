@@ -213,3 +213,28 @@ export const ACTION_TYPES = {
 export function currencyForRegion(region: Region): string {
   return region === 'BR' ? 'BRL' : 'USD';
 }
+
+// ---------- Ad creative image (boa resolução) ----------
+/** Busca a melhor imagem disponível do criativo de um anúncio. */
+export async function fetchAdCreativeImage(adId: string): Promise<string | undefined> {
+  if (!adId) return undefined;
+  const fields = 'creative{image_url,thumbnail_url,object_story_spec{link_data{picture},video_data{image_url}},asset_feed_spec{images{url}}}';
+  const url = `${BASE}/${adId}?fields=${encodeURIComponent(fields)}&access_token=${encodeURIComponent(token())}`;
+  try {
+    const r = await fetch(url, { next: { revalidate: 3600 } });
+    if (!r.ok) return undefined;
+    const j = await r.json();
+    const c = j.creative || {};
+    const oss = c.object_story_spec || {};
+    return (
+      c.image_url ||
+      oss.link_data?.picture ||
+      oss.video_data?.image_url ||
+      c.asset_feed_spec?.images?.[0]?.url ||
+      c.thumbnail_url ||
+      undefined
+    );
+  } catch {
+    return undefined;
+  }
+}

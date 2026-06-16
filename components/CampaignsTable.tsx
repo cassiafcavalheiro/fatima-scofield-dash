@@ -16,18 +16,18 @@ export default function CampaignsTable({ data, currency = 'USD' }: { data: Campa
 
   return (
     <div className="card">
-      <div className="card-title">Top Campaigns</div>
+      <div className="card-title">Principais campanhas</div>
       <div className="overflow-x-auto">
         <table className="w-full text-xs">
           <thead className="text-ink-600 bg-brand-50">
             <tr>
-              <th className="text-left px-2 py-1.5">Campaign name</th>
-              <th className="text-left px-2 py-1.5">Account name</th>
-              <th className="text-right px-2 py-1.5">Spent</th>
-              <th className="text-right px-2 py-1.5">Purchases Value</th>
-              <th className="text-right px-2 py-1.5">Purchases</th>
+              <th className="text-left px-2 py-1.5">Campanha</th>
+              <th className="text-left px-2 py-1.5">Conta</th>
+              <th className="text-right px-2 py-1.5">Gasto</th>
+              <th className="text-right px-2 py-1.5">Valor de compras</th>
+              <th className="text-right px-2 py-1.5">Compras</th>
               <th className="text-right px-2 py-1.5">ROAS</th>
-              <th className="text-right px-2 py-1.5">Cost per Purchase</th>
+              <th className="text-right px-2 py-1.5">Custo por compra</th>
             </tr>
           </thead>
           <tbody>
@@ -43,7 +43,7 @@ export default function CampaignsTable({ data, currency = 'USD' }: { data: Campa
               </tr>
             ))}
             <tr className="border-t-2 border-brand-300 bg-brand-50 font-semibold text-ink-800">
-              <td className="px-2 py-1.5">Grand total</td>
+              <td className="px-2 py-1.5">Total geral</td>
               <td></td>
               <td className="px-2 py-1.5 text-right tabular-nums">{formatCurrency(total.spend, currency, true)}</td>
               <td className="px-2 py-1.5 text-right tabular-nums">{formatCurrency(total.revenue, currency, true)}</td>

@@ -71,8 +71,8 @@ export default function TimeSeriesArea({
       </div>
       {hasHighlight && (
         <div className="flex items-center gap-3 mt-2 text-[11px] text-ink-500">
-          <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm bg-brand-500" />Selected period</span>
-          <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm bg-brand-200" />Context</span>
+          <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm bg-brand-500" />Período selecionado</span>
+          <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm bg-brand-200" />Contexto</span>
         </div>
       )}
     </div>

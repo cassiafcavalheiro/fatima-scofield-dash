@@ -63,6 +63,18 @@ export interface AdRow extends CampaignRow {
   addsToCart?: number;
 }
 
+export interface CreativeCard {
+  id: string;
+  name: string;
+  account: string;
+  image?: string;
+  spend: number;
+  revenue: number;
+  purchases: number;
+  roas: number;
+  ctr?: number;
+}
+
 export interface AgePerformanceRow {
   age: string;
   spend: number;
@@ -134,4 +146,5 @@ export interface DashboardData {
 
   campaigns: CampaignRow[];
   ads: AdRow[];
+  topCreatives: CreativeCard[];
 }

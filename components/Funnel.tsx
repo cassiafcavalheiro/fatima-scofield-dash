@@ -10,16 +10,16 @@ interface Props {
 
 export default function Funnel(props: Props) {
   const steps = [
-    { label: 'Landing page views',        value: props.landingPageViews },
-    { label: 'Website adds to cart',      value: props.addsToCart },
-    { label: 'Website checkouts initiated', value: props.checkoutsInitiated },
-    { label: 'Website purchases',         value: props.purchases },
+    { label: 'Visualizações da página',     value: props.landingPageViews },
+    { label: 'Adições ao carrinho',         value: props.addsToCart },
+    { label: 'Checkouts iniciados',         value: props.checkoutsInitiated },
+    { label: 'Compras',                     value: props.purchases },
   ];
   const max = Math.max(...steps.map((s) => s.value), 1);
 
   return (
     <div className="card">
-      <div className="card-title">CONVERSION FUNNEL</div>
+      <div className="card-title">FUNIL DE CONVERSÃO</div>
       <div className="space-y-2">
         {steps.map((s, i) => {
           const pct = (s.value / max) * 100;
